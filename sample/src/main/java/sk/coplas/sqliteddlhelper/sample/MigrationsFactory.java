@@ -15,7 +15,7 @@ public class MigrationsFactory {
             @Override
             protected void doMigration(SQLiteDatabase db) {
                 try {
-                    String sql = new DDLBuilder().table("Item")
+                    String sql = DDLBuilder.createTable("Item")
                             .integer("id").pk().autoIncrement()
                             .text("name")
                             .integer("value")
@@ -28,4 +28,6 @@ public class MigrationsFactory {
             }
         };
     }
+
+
 }

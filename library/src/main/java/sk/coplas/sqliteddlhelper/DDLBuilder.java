@@ -19,14 +19,22 @@ public class DDLBuilder {
     private String columnNameCache;
     private boolean isAlter;
 
-    public DDLBuilder(){
-        isAlter = false;
+    private DDLBuilder(){
         columns = new LinkedHashMap<String, ColumnType>();
     }
 
-    public DDLBuilder table(String tableName) {
-        this.tableName = tableName;
-        return this;
+    public static DDLBuilder createTable(String tableName) {
+        DDLBuilder builder = new DDLBuilder();
+        builder.tableName = tableName;
+        builder.isAlter = false;
+        return builder;
+    }
+
+    public static DDLBuilder alterTable(String tableName) {
+        DDLBuilder builder = new DDLBuilder();
+        builder.tableName = tableName;
+        builder.isAlter = true;
+        return builder;
     }
 
     public DDLBuilder pk(String columnName) {
@@ -74,21 +82,13 @@ public class DDLBuilder {
         return column(columnName, ColumnType.NONE);
     }
 
-    public DDLBuilder addColumn(String columnName, ColumnType columnType){
-        if (isAlter) {
-            throw new UnsupportedOperationException("Only one column is allowed in SQLite ALTER");
-            //http://stackoverflow.com/questions/6172815/sqlite-alter-table-add-multiple-columns-in-a-single-statement
-        }
-        this.isAlter = true;
-        return column(columnName, columnType);
-    }
-
-    public DDLBuilder create(){
-        this.isAlter = false;
-        return this;
-    }
 
     public DDLBuilder column(String columnName, ColumnType columnType) {
+        if (isAlter && columns.size() > 0) {
+            throw new UnsupportedOperationException("Only one column is allowed in SQLite ALTER");
+            //http://stackoverflow.com/questions/6172815/sqlite-alter-createTableBuilder-add-multiple-columns-in-a-single-statement
+        }
+
         if (!columns.containsKey(columnName)) {
             columns.put(columnName, columnType);
         }
@@ -120,7 +120,6 @@ public class DDLBuilder {
                 if (columnName.equals( autoincrement)) {
                     sb.append(" AUTOINCREMENT");
                 }
-//                sb.append(";");
             }
         } else {
             if (columns.size() < 1) {
@@ -147,13 +146,10 @@ public class DDLBuilder {
                     }
                 }
                 sb.append(")");
-//              sb.append(";");
             }
         }
 
         return sb.toString();
     }
-
-
 
 }
