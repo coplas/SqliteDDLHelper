@@ -1,7 +1,9 @@
 package sk.coplas.sqliteddlhelper;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by coplas on 10/2/14.
@@ -17,10 +19,12 @@ public class DDLBuilder {
     private String primaryKey;
     private String autoincrement;
     private String columnNameCache;
+    private List<String> notNullcolumns;
     private boolean isAlter;
 
     private DDLBuilder(){
         columns = new LinkedHashMap<String, ColumnType>();
+        notNullcolumns = new ArrayList<String>();
     }
 
     public static DDLBuilder createTable(String tableName) {
@@ -56,6 +60,12 @@ public class DDLBuilder {
         this.autoincrement = columnNameCache;
         return this;
     }
+
+    public DDLBuilder notNull() {
+        this.notNullcolumns.add( columnNameCache);
+        return this;
+    }
+
 
 
     public DDLBuilder text(String columnName) {
@@ -114,12 +124,7 @@ public class DDLBuilder {
                 sb.append(columnName);
                 sb.append(" ");
                 sb.append(columnType.toString());
-                if (columnName.equals( primaryKey)) {
-                    sb.append(" PRIMARY KEY");
-                }
-                if (columnName.equals( autoincrement)) {
-                    sb.append(" AUTOINCREMENT");
-                }
+                createColumnParams(sb, columnName);
             }
         } else {
             if (columns.size() < 1) {
@@ -135,12 +140,7 @@ public class DDLBuilder {
                     sb.append(columnName);
                     sb.append(" ");
                     sb.append(columnType.toString());
-                    if (columnName.equals( primaryKey)) {
-                        sb.append(" PRIMARY KEY");
-                    }
-                    if (columnName.equals( autoincrement)) {
-                        sb.append(" AUTOINCREMENT");
-                    }
+                    createColumnParams(sb, columnName);
                     if (columnsIterator.hasNext()) {
                         sb.append(", ");
                     }
@@ -150,6 +150,18 @@ public class DDLBuilder {
         }
 
         return sb.toString();
+    }
+
+    private void createColumnParams(StringBuilder sb, String columnName) {
+        if (columnName.equals( primaryKey)) {
+            sb.append(" PRIMARY KEY");
+        }
+        if (columnName.equals( autoincrement)) {
+            sb.append(" AUTOINCREMENT");
+        }
+        if (notNullcolumns.contains( columnName)) {
+            sb.append(" NOT NULL");
+        }
     }
 
 }
