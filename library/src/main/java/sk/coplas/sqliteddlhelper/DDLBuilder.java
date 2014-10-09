@@ -85,7 +85,7 @@ public class DDLBuilder {
 
     public DDLBuilder column(String columnName, ColumnType columnType) {
         if (isAlter && columns.size() > 0) {
-            throw new UnsupportedOperationException("Only one column is allowed in SQLite ALTER");
+            throw new IllegalArgumentException("Only one column is allowed in SQLite ALTER");
             //http://stackoverflow.com/questions/6172815/sqlite-alter-createTableBuilder-add-multiple-columns-in-a-single-statement
         }
 
@@ -99,11 +99,11 @@ public class DDLBuilder {
     public String build(){
         StringBuilder sb = new StringBuilder();
         if (tableName == null || tableName.length() < 0) {
-            throw new UnsupportedOperationException("Table name is required");
+            throw new IllegalArgumentException("Table name is required");
         }
         if (isAlter) {
             if (columns.size() != 1) {
-                throw new UnsupportedOperationException("One column is required in SQLite ALTER");
+                throw new IllegalArgumentException("One column is required in SQLite ALTER");
             } else {
                 //get first column
                 String columnName = columns.keySet().iterator().next();
@@ -123,7 +123,7 @@ public class DDLBuilder {
             }
         } else {
             if (columns.size() < 1) {
-                throw new UnsupportedOperationException("At least one column is required in SQLite CREATE");
+                throw new IllegalArgumentException("At least one column is required in SQLite CREATE");
             } else {
                 sb.append("CREATE TABLE ");
                 sb.append(tableName);
