@@ -3,7 +3,7 @@ package sk.coplas.sqliteddlhelper.sample;
 import android.database.sqlite.SQLiteDatabase;
 
 import se.emilsjolander.sprinkles.Migration;
-import sk.coplas.sqliteddlhelper.DDLBuilder;
+import sk.coplas.sqliteddlhelper.DDLBuilderFactory;
 
 /**
  * Created by coplas on 10/2/14.
@@ -15,7 +15,7 @@ public class MigrationsFactory {
             @Override
             protected void doMigration(SQLiteDatabase db) {
                 try {
-                    String sql = DDLBuilder.createTable("Item")
+                    String sql = DDLBuilderFactory.createTable("Item")
                             .integer("id").pk().autoIncrement()
                             .text("name")
                             .integer("value")
@@ -29,5 +29,21 @@ public class MigrationsFactory {
         };
     }
 
+    public static Migration itemAlter() {
+        return new Migration() {
+            @Override
+            protected void doMigration(SQLiteDatabase db) {
+                try {
+                    String sql = DDLBuilderFactory.alterTable("Item")
+                            .text("value2")
+                            .build();
+                    db.execSQL(sql);
+                } catch (android.database.SQLException e){
+//                    Utils.e("Error running sql statement: " + sql);
+//                    Utils.e(e);
+                }
+            }
+        };
+    }
 
 }
