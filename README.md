@@ -28,7 +28,7 @@ https://jitpack.io/#coplas/SqliteDDLHelper/0.1
 ```
 
 # Usage
-Builds SQL DDL statement to create or alter SQLite databaze, I used it personally in my Android projects.
+Builds SQL DDL statement to create or alter SQLite database, I used it personally in my Android projects.
 
 
 ## Generate Create table statement
@@ -48,4 +48,17 @@ final String sql = DDLBuilderFactory.createTable("items")
  final String sql = DDLBuilderFactory.alterTable("items")
                 .text("value")
                 .build();
+```
+
+## Possible column types
+
+```java
+enum ColumnType {
+    TEXT,
+    NUMERIC,
+    INTEGER,
+    REAL,
+    BOOLEAN,
+    NONE;
+}
 ```
