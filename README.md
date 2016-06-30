@@ -23,7 +23,7 @@ https://jitpack.io/#coplas/SqliteDDLHelper/0.1
 
 ```groovy
   dependencies {
-	  compile 'com.github.coplas:SqliteDDLHelper:0.1'
+	  compile 'com.github.coplas:SqliteDDLHelper:0.2'
   }
 ```
 
