@@ -69,7 +69,6 @@ public class DDLColumnBuilder {
         sb.append(" ");
         sb.append(type.toString());
         createColumnParams(sb);
-        sb.append(")");
 
         return sb.toString();
     }
