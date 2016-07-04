@@ -10,7 +10,7 @@ Use it using jitpack.io
 
 [![](https://jitpack.io/v/coplas/SqliteDDLHelper.svg)](https://jitpack.io/#coplas/SqliteDDLHelper)
 
-https://jitpack.io/#coplas/SqliteDDLHelper/0.1
+https://jitpack.io/#coplas/SqliteDDLHelper
 
 ```groovy
   allprojects {
